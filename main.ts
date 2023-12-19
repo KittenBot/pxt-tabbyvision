@@ -76,11 +76,11 @@ namespace tabbyvision {
 
     /**
      * Init the tabbyvision library with serial connection
-     * @param tx Tx pin; eg: SerialPin.P0
-     * @param rx Rx pin; eg: SerialPin.P1
+     * @param tx Tx pin; eg: SerialPin.P8
+     * @param rx Rx pin; eg: SerialPin.P9
      */
-    //% blockId=tabbyvision_init block="init tabbyvision Tx Tx %tx Rx %rx"
-    //% weight=100 group="basic"
+    //% blockId=tabbyvision_init block="init tabbyvision Tx %tx Rx %rx"
+    //% weight=100 group="Basic"
     export function init(tx: SerialPin, rx: SerialPin): void {
         serial.redirect(tx, rx, BaudRate.BaudRate115200);
         serial.setTxBufferSize(64)
@@ -94,7 +94,7 @@ namespace tabbyvision {
      * @param dir Direction; eg: 0
      */
     //% blockId=tabbyvision_lcd_direction block="LCD direction %dir"
-    //% weight=99 group="basic"
+    //% weight=99 group="Basic"
     export function lcdDirection(dir: LCD_Direction): void {
         
     }
@@ -104,7 +104,7 @@ namespace tabbyvision {
      * @param handler 
      */
     //% blockId=tabbyvision_on_button_pressed block="on button pressed"
-    //% weight=98 group="basic"
+    //% weight=98 group="Basic"
     export function onButtonPressed(handler: () => void): void {
         btnEvent = handler
     }
@@ -114,7 +114,7 @@ namespace tabbyvision {
      * @param func Function; eg: TrafficSign
      */
     //% blockId=tabbyvision_switch_function block="switch function %func"
-    //% weight=97 group="basic"
+    //% weight=97 group="Basic"
     export function switchFunction(func: ModelFunction): void {
         
     }
@@ -125,7 +125,7 @@ namespace tabbyvision {
      */
     //% blockId=tabbyvision_color_blob_tracking_set_color block="color blob tracking set color %color"
     //% color.shadow="colorNumberPicker"
-    //% weight=90 group="color blob tracking"
+    //% weight=90 group="Color blob tracking"
     export function colorObjectTrackingSetColor(color: number): void {
         
     }
@@ -135,7 +135,7 @@ namespace tabbyvision {
      * @returns position [x, y]
      */
     //% blockId=tabbyvision_color_blob_tracking_get_position block="color blob tracking get position"
-    //% weight=89 group="color blob tracking"
+    //% weight=89 group="Color blob tracking"
     export function colorObjectTrackingGetPosition(): number[] {
         return [0, 0]
     }
@@ -145,7 +145,7 @@ namespace tabbyvision {
      * @returns class
      */
     //% blockId=tabbyvision_traffic_sign_get_class block="traffic sign get class"
-    //% weight=80 group="traffic sign"
+    //% weight=80 group="Traffic sign"
     export function trafficSignGetClass(): number {
         return 0
     }
@@ -155,7 +155,7 @@ namespace tabbyvision {
      * @returns position [x, y]
      */
     //% blockId=tabbyvision_traffic_sign_get_position block="traffic sign get position"
-    //% weight=79 group="traffic sign"
+    //% weight=79 group="Traffic sign"
     export function trafficSignGetPosition(): number[] {
         return [0, 0]
     }
@@ -164,7 +164,7 @@ namespace tabbyvision {
      * Line Follower Set Threshold
      */
     //% blockId=tabbyvision_line_follower_set_threshold block="line follower set threshold %threshold"
-    //% weight=70 group="line follower"
+    //% weight=70 group="Line follower"
     export function lineFollowerSetThreshold(threshold: number): void {
         
     }
@@ -174,7 +174,7 @@ namespace tabbyvision {
      * @returns bias x
      */
     //% blockId=tabbyvision_line_follower_get_position block="line follower get position"
-    //% weight=69 group="line follower"
+    //% weight=69 group="Line follower"
     export function lineFollowerGetPosition(): number {
         return 0
     }
@@ -184,7 +184,7 @@ namespace tabbyvision {
      * @returns position [x, y]
      */
     //% blockId=tabbyvision_face_tracking_get_position block="face tracking get position"
-    //% weight=60 group="face tracking"
+    //% weight=60 group="Face tracking"
     export function faceTrackingGetPosition(): number[] {
         return [0, 0]
     }
@@ -194,7 +194,7 @@ namespace tabbyvision {
      * @returns class
      */
     //% blockId=tabbyvision_object_tracking_get_class block="object tracking get class"
-    //% weight=50 group="object tracking"
+    //% weight=50 group="Object tracking"
     export function objectTrackingGetClass(): VOC2012_Object {
         return -1
     }
@@ -204,7 +204,7 @@ namespace tabbyvision {
      * @returns position [x, y]
      */
     //% blockId=tabbyvision_object_tracking_get_position block="object tracking get position"
-    //% weight=49 group="object tracking"
+    //% weight=49 group="Object tracking"
     export function objectTrackingGetPosition(): number[] {
         return [0, 0]
     }
@@ -213,7 +213,7 @@ namespace tabbyvision {
      * Classify Image Reset
      */
     //% blockId=tabbyvision_classify_image_reset block="classify image reset"
-    //% weight=40 group="classify image"
+    //% weight=40 group="Classify image"
     export function classifyImageReset(): void {
         
     }
@@ -223,7 +223,7 @@ namespace tabbyvision {
      * @param name
      */
     //% blockId=tabbyvision_classify_image_learn_by_name block="classify image learn by name %name"
-    //% weight=39 group="classify image"
+    //% weight=39 group="Classify image"
     export function classifyImageLearnByID(name: string): void {
         
     }
@@ -233,7 +233,7 @@ namespace tabbyvision {
      * @returns class
      */
     //% blockId=tabbyvision_classify_image_get_class block="classify image get class"
-    //% weight=38 group="classify image"
+    //% weight=38 group="Classify image"
     export function classifyImageGetClass(): string {
         return ''
     }
@@ -243,7 +243,7 @@ namespace tabbyvision {
      * @returns number
      */
     //% blockId=tabbyvision_number_recognition_get_number block="number recognition get number"
-    //% weight=30 group="number recognition"
+    //% weight=30 group="Number recognition"
     export function numberRecognitionGetNumber(): number {
         return 0
     }
