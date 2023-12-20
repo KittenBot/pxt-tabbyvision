@@ -1,4 +1,6 @@
 //% color="#5c7cfa" weight=10 icon="\uf030"
+//% groups='["Basic", "Classifier", "Face tracking", "Color blob tracking", "Line follower", "Traffic sign", "Number recognition", "Object tracking"]'
+
 
 namespace tabbyvision { 
 
@@ -78,7 +80,7 @@ namespace tabbyvision {
     /*
     * Traffic sign Card
     */
-    export enum TrafficCards {
+    export enum TrafficCard {
         //% block="Forward"
         forward = 1,
         //% block="Turn around"
@@ -119,6 +121,20 @@ namespace tabbyvision {
         eight = 8,
         //% block="9"
         nine = 9
+    }
+
+    /**
+    * Result list
+    */
+    export enum Result {
+        //% block="X"
+        X = 1,
+        //% block="Y"
+        Y = 2,
+        //% block="W"
+        W = 3,
+        //% block="H"
+        H = 4
     }
         
 
@@ -166,6 +182,8 @@ namespace tabbyvision {
      */
     //% blockId=tabbyvision_switch_function block="switch function %func"
     //% weight=97 group="Basic"
+    //% func.fieldEditor="gridpicker"
+    //% func.fieldOptions.columns=3
     export function switchFunction(func: ModelFunction): void {
         
     }
@@ -183,11 +201,15 @@ namespace tabbyvision {
 
     /**
      * Color Blob Tracking Get Position
-     * @returns position [x, y]
+     * 
      */
-    //% blockId=tabbyvision_color_blob_tracking_get_position block="color blob tracking get position"
+    //% block = "color blob tracking get result %result"
+    //% blockId=tabbyvision_color_blob_tracking_get_result
     //% weight=89 group="Color blob tracking"
-    export function colorObjectTrackingGetPosition(): number[] {
+    //% result.fieldEditor="gridpicker"
+    //% result.fieldOptions.columns=4
+    
+    export function colorObjectTrackingGetPosition(result: Result): number[] {
         return [0, 0]
     }
 
@@ -195,10 +217,13 @@ namespace tabbyvision {
      * Traffic Sign Get Class
      * @returns class
      */
-    //% blockId=tabbyvision_traffic_sign_get_class block="traffic sign get class"
+    //% block="traffic sign get class:%tsclass"
+    //% blockId=tabbyvision_traffic_sign_get_class
     //% weight=80 group="Traffic sign"
-    export function trafficSignGetClass(): number {
-        return 0
+    //% tsclass.fieldEditor="gridpicker"
+    //% tsclass.fieldOptions.columns=2
+    export function trafficSignGetClass(tsclass: TrafficCard): boolean {
+        return false
     }
 
     /**
@@ -293,7 +318,7 @@ namespace tabbyvision {
 
     /**
      * Number Recognition Get Number
-     * @param number NumberCard; eg:6
+     * @param number NumberCard; eg: NumberCard.6
      */
     //% block = "number recognition get number %number "
     //% blockId=tabbyvision_number_recognition_get_number 
