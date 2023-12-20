@@ -212,12 +212,14 @@ namespace tabbyvision {
 
     /**
      * Object Tracking Get Class
-     * @returns class
+     * @param object VOC2012_Object, eg: VOC2012_Object.cat
      */
-    //% blockId=tabbyvision_object_tracking_get_class block="object tracking get class"
+    //% block="object tracking get class: %object"
+    //% blockId=tabbyvision_object_tracking_get_class
     //% weight=50 group="Object tracking"
-    export function objectTrackingGetClass(): VOC2012_Object {
-        return -1
+    export function objectTrackingGetClass(object: VOC2012_Object): boolean {
+
+            return false
     }
 
     /**
