@@ -26,6 +26,10 @@ namespace tabbyvision {
         ClassifyImage = 6,
     }
 
+    /*
+    * VOC2012_Object Card
+    */
+    
     export enum VOC2012_Object {
         //% block=nothing
         nothing = -1,
@@ -90,6 +94,32 @@ namespace tabbyvision {
         //% block="Tunnel"
         tunnel = 7
     }
+
+    /**
+    * Number Card
+    */
+    export enum NumberCard {
+        //% block="0"
+        zero = 0,
+        //% block="1"
+        one = 1,
+        //% block="2"
+        two = 2,
+        //% block="3"
+        three = 3,
+        //% block="4"
+        four = 4,
+        //% block="5"
+        five = 5,
+        //% block="6"
+        six = 6,
+        //% block="7"
+        seven = 7,
+        //% block="8"
+        eight = 8,
+        //% block="9"
+        nine = 9
+    }
         
 
 
@@ -132,7 +162,7 @@ namespace tabbyvision {
 
     /**
      * Switch Function
-     * @param func Function; eg: TrafficSign
+     * @param func Function; eg: LineFollower
      */
     //% blockId=tabbyvision_switch_function block="switch function %func"
     //% weight=97 group="Basic"
@@ -212,7 +242,7 @@ namespace tabbyvision {
 
     /**
      * Object Tracking Get Class
-     * @param object VOC2012_Object, eg: VOC2012_Object.cat
+     * @param object VOC2012_Object; eg: VOC2012_Object.cat
      */
     //% block="object tracking get class: %object"
     //% blockId=tabbyvision_object_tracking_get_class
@@ -263,12 +293,13 @@ namespace tabbyvision {
 
     /**
      * Number Recognition Get Number
-     * @returns number
+     * @param number NumberCard; eg:6
      */
-    //% blockId=tabbyvision_number_recognition_get_number block="number recognition get number"
+    //% block = "number recognition get number %number "
+    //% blockId=tabbyvision_number_recognition_get_number 
     //% weight=30 group="Number recognition"
-    export function numberRecognitionGetNumber(): number {
-        return 0
+    export function numberRecognitionGetNumber(number: NumberCard): boolean {
+        return false
     }
 
 }
