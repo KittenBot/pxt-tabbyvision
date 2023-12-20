@@ -70,6 +70,26 @@ namespace tabbyvision {
         //% block=tvmonitor
         tvmonitor = 19,
     }
+
+    /*
+    * Traffic sign Card
+    */
+    export enum TrafficCards {
+        //% block="Forward"
+        forward = 1,
+        //% block="Turn around"
+        turnaround = 2,
+        //% block="Left"
+        left = 3,
+        //% block="Right"
+        right = 4,
+        //% block="Stop"
+        stop = 5,
+        //% block="Speed limit"
+        speedlimit = 6,
+        //% block="Tunnel"
+        tunnel = 7
+    }
         
 
 
@@ -214,7 +234,7 @@ namespace tabbyvision {
      * Classify Image Reset
      */
     //% blockId=tabbyvision_classify_image_reset block="classify image reset"
-    //% weight=40 group="Classify image"
+    //% weight=40 group="Classifier"
     export function classifyImageReset(): void {
         
     }
@@ -224,7 +244,7 @@ namespace tabbyvision {
      * @param name
      */
     //% blockId=tabbyvision_classify_image_learn_by_name block="classify image learn by name %name"
-    //% weight=39 group="Classify image"
+    //% weight=39 group="Classifier"
     export function classifyImageLearnByID(name: string): void {
         
     }
@@ -234,7 +254,7 @@ namespace tabbyvision {
      * @returns class
      */
     //% blockId=tabbyvision_classify_image_get_class block="classify image get class"
-    //% weight=38 group="Classify image"
+    //% weight=38 group="Classifier"
     export function classifyImageGetClass(): string {
         return ''
     }
