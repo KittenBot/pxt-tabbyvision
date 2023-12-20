@@ -200,10 +200,10 @@ namespace tabbyvision {
     }
 
     /**
-     * Color Blob Tracking Get Position
-     * 
+     * Color Blob Tracking Get Result
+     * @returns result
      */
-    //% block = "color blob tracking get result %result"
+    //% block = "color blob tracking get abc %result"
     //% blockId=tabbyvision_color_blob_tracking_get_result
     //% weight=89 group="Color blob tracking"
     //% result.fieldEditor="gridpicker"
@@ -259,9 +259,14 @@ namespace tabbyvision {
      * Face Tracking Get Position
      * @returns position [x, y]
      */
-    //% blockId=tabbyvision_face_tracking_get_position block="face tracking get position"
+
+    //% block = "face tracking get: %result "
+    //% blockId=tabbyvision_face_tracking_get_position
     //% weight=60 group="Face tracking"
-    export function faceTrackingGetPosition(): number[] {
+    //% result.fieldEditor="gridpicker"
+    //% result.fieldOptions.columns=4
+
+    export function faceTrackingGetPosition(result : Result): number[] {
         return [0, 0]
     }
 
