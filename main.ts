@@ -1,3 +1,4 @@
+//% color="#5c7cfa" weight=10 icon="\uf030"
 
 namespace tabbyvision { 
 
@@ -76,8 +77,8 @@ namespace tabbyvision {
 
     /**
      * Init the tabbyvision library with serial connection
-     * @param tx Tx pin; eg: SerialPin.P8
-     * @param rx Rx pin; eg: SerialPin.P9
+     * @param tx Tx pin; eg: SerialPin.P13
+     * @param rx Rx pin; eg: SerialPin.P14
      */
     //% blockId=tabbyvision_init block="init tabbyvision Tx %tx Rx %rx"
     //% weight=100 group="Basic"
