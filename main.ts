@@ -2,7 +2,15 @@
 //% groups='["Basic", "Classifier", "Face tracking", "Color blob tracking", "Line follower", "Traffic sign", "Number recognition", "Object tracking"]'
 
 
-namespace tabbyvision { 
+namespace tabbyvision {
+
+    // cached results
+    let _className: string = ''
+    let _posX: number = -1
+    let _posY: number = -1
+    let _posW: number = -1
+    let _posH: number = -1
+
 
     export enum LCD_Direction {
         //% block=Front
@@ -11,27 +19,47 @@ namespace tabbyvision {
         Back = 2
     }
 
-    export enum ModelFunction { 
+    export enum ModelFunction {
         //% block=TrafficSign
-        TrafficSign = 0,
-        //% block=LineFollower
-        LineFollower = 1,
+        TrafficSign = 'sign',
         //% block=ObjectTracking
-        ObjectTracking = 2,
-        //% block=ColorBlobTracking
-        ColorBlobTracking = 3,
+        ObjectTracking = 'object',
         //% block=FaceTracking
-        FaceTracking = 4,
+        FaceTracking = 'face',
         //% block=NumberRecognition
-        NumberRecognition = 5,
+        NumberRecognition = 'mnist',
         //% block=ClassifyImage
-        ClassifyImage = 6,
+        ClassifyImage = 'feature',
+    }
+
+    export enum CvFunction {
+        //% block=ColorBlobTracking
+        ColorBlobTracking = 'color',
+        //% block=LineFollower
+        LineFollower = 'linefollow',
+    }
+
+    export enum FullFunction {
+        //% block=TrafficSign
+        TrafficSign = 'sign',
+        //% block=ObjectTracking
+        ObjectTracking = 'object',
+        //% block=FaceTracking
+        FaceTracking = 'face',
+        //% block=NumberRecognition
+        NumberRecognition = 'mnist',
+        //% block=ClassifyImage
+        ClassifyImage = 'feature',
+        //% block=ColorBlobTracking
+        ColorBlobTracking = 'color',
+        //% block=LineFollower
+        LineFollower = 'linefollow',
     }
 
     /*
     * VOC2012_Object Card
     */
-    
+
     export enum VOC2012_Object {
         //% block=nothing
         nothing = -1,
@@ -137,10 +165,94 @@ namespace tabbyvision {
         result_H = 4
     }
 
-        
+    /**
+     * Result XY
+     */
+    export enum GetResultXY {
+        //% block="X"
+        result_X = 1,
+        //% block="Y"
+        result_Y = 2
+    }
+
+
 
 
     let btnEvent: (btn: number) => void
+
+    function trim(n: string): string {
+        while (n.charCodeAt(n.length - 1) < 0x1f) {
+            n = n.slice(0, n.length - 1)
+        }
+        return n
+    }
+
+    serial.onDataReceived('\n', function () {
+        let a = serial.readUntil('\n')
+        if (a.charAt(0) == 'K') {
+            a = trim(a)
+            let b = a.slice(1, a.length).split(' ')
+            let cmd = parseInt(b[0])
+            if (cmd == 42) { // feature extraction
+                _className = b[1]
+            } else if (cmd == 31) { // face tracking
+                _posX = parseInt(b[1])
+                _posY = parseInt(b[2])
+                _posW = parseInt(b[3])
+                _posH = parseInt(b[4])
+                _className = b[5]
+            } else if (cmd == 15) { // color blob tracking
+                _posX = parseInt(b[1])
+                _posY = parseInt(b[2])
+                _posW = parseInt(b[3])
+                _posH = parseInt(b[4])
+            } else if (cmd == 19) { // line follower color
+                _posX = parseInt(b[1])
+                _posY = parseInt(b[2])
+            } else if (cmd == 81) { // traffic sign
+                _className = b[5]
+            } else if (cmd == 83) { // number recognition
+                _className = b[5]
+            }
+        }
+    })
+
+    function getResultXYWH(res: GetResult): number {
+        let ret = -1
+        if (res == GetResult.result_X) {
+            ret = _posX
+            _posX = -1
+        } else if (res == GetResult.result_Y) {
+            ret = _posY
+            _posY = -1
+        } else if (res == GetResult.result_W) {
+            ret = _posW
+            _posW = -1
+        } else if (res == GetResult.result_H) {
+            ret = _posH
+            _posH = -1
+        }
+        return ret
+    }
+
+    function getResultXY(res: GetResultXY): number {
+        let ret = -1
+        if (res == GetResultXY.result_X) {
+            ret = _posX
+            _posX = -1
+        } else if (res == GetResultXY.result_Y) {
+            ret = _posY
+            _posY = -1
+        }
+        return ret
+    }
+
+    function getResultClass(): string {
+        let ret = _className
+        _className = ''
+        return ret
+    }
+
 
     /**
      * Init the tabbyvision library with serial connection
@@ -164,7 +276,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_lcd_direction block="LCD direction %dir"
     //% weight=99 group="Basic"
     export function lcdDirection(dir: LCD_Direction): void {
-        
+        serial.writeLine(`K6 ${dir}`)
     }
 
     /**
@@ -185,9 +297,24 @@ namespace tabbyvision {
     //% weight=97 group="Basic"
     //% func.fieldEditor="gridpicker"
     //% func.fieldOptions.columns=3
-    export function switchFunction(func: ModelFunction): void {
-        
+    export function switchFunction(func: FullFunction): void {
+        serial.writeLine(`K97 ${func}`)
     }
+
+    /**
+     * Enable Model + CV
+     * @param model Function; eg: FaceTracking
+     * @param cv Function; eg: ColorBlobTracking
+     */
+    //% blockId=tabbyvision_enable_model_cv block="enable model %model cv %cv"
+    //% weight=96 group="Basic"
+    //% model.fieldEditor="gridpicker"
+    //% model.fieldOptions.columns=3
+    //% advanced=true
+    export function enableModelCV(model: ModelFunction, cv: CvFunction): void {
+        serial.writeLine(`K97 ${model} ${cv}`)
+    }
+
 
     /**
      * Color Blob Tracking Set Color
@@ -197,7 +324,7 @@ namespace tabbyvision {
     //% color.shadow="colorNumberPicker"
     //% weight=90 group="Color blob tracking"
     export function colorObjectTrackingSetColor(color: number): void {
-        
+        serial.writeLine(`K18 ${color}`)
     }
 
     /**
@@ -209,9 +336,9 @@ namespace tabbyvision {
     //% weight=89 group="Color blob tracking"
     //% res.fieldEditor="gridpicker"
     //% res.fieldOptions.columns=4
-    
+
     export function colorObjectTrackingGetPosition(res: GetResult): number {
-        return 0
+        return getResultXYWH(res)
     }
 
     /**
@@ -224,17 +351,19 @@ namespace tabbyvision {
     //% tsclass.fieldEditor="gridpicker"
     //% tsclass.fieldOptions.columns=2
     export function trafficSignGetClass(tsclass: TrafficCard): boolean {
-        return false
+        let ret = _className == tsclass.toString()
+        _className = ''
+        return ret
     }
 
     /**
      * Traffic Sign Get Position
-     * @returns position [x, y]
+     * @returns position; eg: GetResult.result_X
      */
     //% blockId=tabbyvision_traffic_sign_get_position block="traffic sign get position"
     //% weight=79 group="Traffic sign"
-    export function trafficSignGetPosition(): number[] {
-        return [0, 0]
+    export function trafficSignGetPosition(res: GetResult): number {
+        return getResultXYWH(res)
     }
 
     /**
@@ -243,7 +372,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_line_follower_set_threshold block="line follower set threshold %threshold"
     //% weight=70 group="Line follower"
     export function lineFollowerSetThreshold(threshold: number): void {
-        
+
     }
 
     /**
@@ -252,8 +381,8 @@ namespace tabbyvision {
      */
     //% blockId=tabbyvision_line_follower_get_position block="line follower get position"
     //% weight=69 group="Line follower"
-    export function lineFollowerGetPosition(): number {
-        return 0
+    export function lineFollowerGetPosition(res: GetResultXY): number {
+        return getResultXY(res)
     }
 
     /**
@@ -263,7 +392,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_face_tracking_get_position
     //% weight=60 group="Face tracking"
     export function faceTrackingGetPosition(res: GetResult): number {
-        return 0
+        return getResultXYWH(res)
     }
 
     /**
@@ -274,8 +403,8 @@ namespace tabbyvision {
     //% blockId=tabbyvision_object_tracking_get_class
     //% weight=50 group="Object tracking"
     export function objectTrackingGetClass(object: VOC2012_Object): boolean {
-
-            return false
+        let ret = _className == object.toString()
+        return ret
     }
 
     /**
@@ -294,7 +423,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_classify_image_reset block="classify image reset"
     //% weight=40 group="Classifier"
     export function classifyImageReset(): void {
-        
+
     }
 
     /**
@@ -304,7 +433,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_classify_image_add_tag block="classify image add tag %name"
     //% weight=39 group="Classifier"
     export function classifyImageAddTagID(name: string): void {
-        
+        serial.writeLine(`K41 ${name}`)
     }
 
     /**
@@ -314,9 +443,9 @@ namespace tabbyvision {
     //% blockId=tabbyvision_classify_image_get_class block="classify image get class"
     //% weight=38 group="Classifier"
     export function classifyImageGetClass(): string {
-        return ''
+        return getResultClass()
     }
-    
+
     /**
      * Classify Image Save
      * @param path json to save; eg: model.json
