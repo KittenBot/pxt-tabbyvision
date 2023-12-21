@@ -21,40 +21,51 @@ namespace tabbyvision {
 
     export enum ModelFunction {
         //% block=TrafficSign
-        TrafficSign = 'sign',
+        TrafficSign = 0x1,
         //% block=ObjectTracking
-        ObjectTracking = 'object',
+        ObjectTracking = 0x2,
         //% block=FaceTracking
-        FaceTracking = 'face',
+        FaceTracking = 0x3,
         //% block=NumberRecognition
-        NumberRecognition = 'mnist',
+        NumberRecognition = 0x4,
         //% block=ClassifyImage
-        ClassifyImage = 'feature',
+        ClassifyImage = 0x5,
     }
 
     export enum CvFunction {
         //% block=ColorBlobTracking
-        ColorBlobTracking = 'color',
+        ColorBlobTracking = 0x10,
         //% block=LineFollower
-        LineFollower = 'linefollow',
+        LineFollower = 0x20,
     }
 
     export enum FullFunction {
         //% block=TrafficSign
-        TrafficSign = 'sign',
+        TrafficSign = 0x1,
         //% block=ObjectTracking
-        ObjectTracking = 'object',
+        ObjectTracking = 0x2,
         //% block=FaceTracking
-        FaceTracking = 'face',
+        FaceTracking = 0x3,
         //% block=NumberRecognition
-        NumberRecognition = 'mnist',
+        NumberRecognition = 0x4,
         //% block=ClassifyImage
-        ClassifyImage = 'feature',
+        ClassifyImage = 0x5,
         //% block=ColorBlobTracking
-        ColorBlobTracking = 'color',
+        ColorBlobTracking = 0x10,
         //% block=LineFollower
-        LineFollower = 'linefollow',
+        LineFollower = 0x20,
     }
+
+    export enum ColorNames {
+        //% block=red
+        red = 1,
+        //% block=blue
+        blue = 2,
+        //% block=yellow
+        yellow = 3,
+    }
+
+
 
     /*
     * VOC2012_Object Card
@@ -312,7 +323,7 @@ namespace tabbyvision {
     //% model.fieldOptions.columns=3
     //% advanced=true
     export function enableModelCV(model: ModelFunction, cv: CvFunction): void {
-        serial.writeLine(`K97 ${model} ${cv}`)
+        serial.writeLine(`K97 ${model+cv}`)
     }
 
 
@@ -367,12 +378,13 @@ namespace tabbyvision {
     }
 
     /**
-     * Line Follower Set Threshold
+     * Line Follower Set Key Color
+     * @param color
      */
     //% blockId=tabbyvision_line_follower_set_threshold block="line follower set threshold %threshold"
     //% weight=70 group="Line follower"
-    export function lineFollowerSetThreshold(threshold: number): void {
-
+    export function lineFollowerSetThreshold(key: ColorNames) {
+        serial.writeLine(`K19 ${key}`)
     }
 
     /**
@@ -409,12 +421,13 @@ namespace tabbyvision {
 
     /**
      * Object Tracking Get Position
-     * @returns position [x, y]
+     * @param axis for x; eg: GetResult.result_X
+     * @returns position
      */
-    //% blockId=tabbyvision_object_tracking_get_position block="object tracking get position"
+    //% blockId=tabbyvision_object_tracking_get_position block="object tracking get position %axis"
     //% weight=49 group="Object tracking"
-    export function objectTrackingGetPosition(): number[] {
-        return [0, 0]
+    export function objectTrackingGetPosition(axis: GetResult): number {
+        return getResultXYWH(axis)
     }
 
     /**
@@ -423,7 +436,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_classify_image_reset block="classify image reset"
     //% weight=40 group="Classifier"
     export function classifyImageReset(): void {
-
+        serial.writeLine(`K45`)
     }
 
     /**
@@ -477,7 +490,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_number_recognition_get_number 
     //% weight=30 group="Number recognition"
     export function numberRecognitionGetNumber(number: NumberCard): boolean {
-        return false
+        return getResultClass() == number.toString()
     }
 
 }
