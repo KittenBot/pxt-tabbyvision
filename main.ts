@@ -126,16 +126,17 @@ namespace tabbyvision {
     /**
     * Result list
     */
-    export enum Result {
+    export enum GetResult {
         //% block="X"
-        X = 1,
+        result_X = 1,
         //% block="Y"
-        Y = 2,
+        result_Y = 2,
         //% block="W"
-        W = 3,
+        result_W = 3,
         //% block="H"
-        H = 4
+        result_H = 4
     }
+
         
 
 
@@ -201,16 +202,16 @@ namespace tabbyvision {
 
     /**
      * Color Blob Tracking Get Result
-     * @returns result
+     * @param res for color; eg: GetResult.result_X
      */
-    //% block = "color blob tracking get abc %result"
+    //% block = "color blob tracking get result %res"
     //% blockId=tabbyvision_color_blob_tracking_get_result
     //% weight=89 group="Color blob tracking"
-    //% result.fieldEditor="gridpicker"
-    //% result.fieldOptions.columns=4
+    //% res.fieldEditor="gridpicker"
+    //% res.fieldOptions.columns=4
     
-    export function colorObjectTrackingGetPosition(result: Result): number[] {
-        return [0, 0]
+    export function colorObjectTrackingGetPosition(res: GetResult): number {
+        return 0
     }
 
     /**
@@ -256,18 +257,13 @@ namespace tabbyvision {
     }
 
     /**
-     * Face Tracking Get Position
-     * @returns position [x, y]
-     */
-
-    //% block = "face tracking get: %result "
+    * Face Tracking Get Position 
+    */
+    //% block = "face tracking get %res"
     //% blockId=tabbyvision_face_tracking_get_position
     //% weight=60 group="Face tracking"
-    //% result.fieldEditor="gridpicker"
-    //% result.fieldOptions.columns=4
-
-    export function faceTrackingGetPosition(result : Result): number[] {
-        return [0, 0]
+    export function faceTrackingGetPosition(res: GetResult): number {
+        return 0
     }
 
     /**
@@ -302,12 +298,12 @@ namespace tabbyvision {
     }
 
     /**
-     * Classify Image Learn by Name
-     * @param name
+     * Classify Image Add Tag
+     * @param name tag; eg: apple
      */
-    //% blockId=tabbyvision_classify_image_learn_by_name block="classify image learn by name %name"
+    //% blockId=tabbyvision_classify_image_add_tag block="classify image add tag %name"
     //% weight=39 group="Classifier"
-    export function classifyImageLearnByID(name: string): void {
+    export function classifyImageAddTagID(name: string): void {
         
     }
 
@@ -320,6 +316,29 @@ namespace tabbyvision {
     export function classifyImageGetClass(): string {
         return ''
     }
+    
+    /**
+     * Classify Image Save
+     * @param path json to save; eg: model.json
+     */
+    //% blockId=tabbyvision_classify_image_save block="classify image save classifier %path"
+    //% group="Classifier" weight=35
+    export function classifyImageSave(path: string): void {
+        let str = `K43 ${path}`
+        serial.writeLine(str)
+    }
+
+    /**
+     * Classify Image Load
+     * @param path json to load; eg: model.json
+     */
+    //% blockId=tabbyvision_classify_image_load block="classify image load classifier %path"
+    //% group="Classifier" weight=34
+    export function classifyImageLoad(path: string): void {
+        let str = `K44 ${path}`
+        serial.writeLine(str)
+    }
+
 
     /**
      * Number Recognition Get Number
