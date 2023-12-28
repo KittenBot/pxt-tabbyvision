@@ -1,8 +1,6 @@
-//% color="#5c7cfa" weight=10 icon="\uf030"
-//% groups='["Basic", "Classifier", "Face tracking", "Color blob tracking", "Line follower", "Traffic sign", "Number recognition", "Object tracking"]'
-
-
 namespace tabbyvision {
+
+    let koiNewEventId = 1228
 
     // cached results
     let _className: string = ''
@@ -17,6 +15,15 @@ namespace tabbyvision {
         Front = 0,
         //% block=Back
         Back = 2
+    }
+
+    export enum BTNCmd {
+        //% block="A"
+        A = 1,
+        //% block="B"
+        B = 2,
+        //% block="A+B"
+        AB = 3
     }
 
     export enum ModelFunction {
@@ -224,6 +231,8 @@ namespace tabbyvision {
                 _className = b[5]
             } else if (cmd == 83) { // number recognition
                 _className = b[5]
+            } else if (cmd == 3) { // number recognition
+                control.raiseEvent(koiNewEventId, parseInt(b[1]))
             }
         }
     })
@@ -247,21 +256,21 @@ namespace tabbyvision {
     }
 
     function getResultXY(res: GetResultXY): number {
-        let ret = -1
+        let ret2 = -1
         if (res == GetResultXY.result_X) {
-            ret = _posX
+            ret2 = _posX
             _posX = -1
         } else if (res == GetResultXY.result_Y) {
-            ret = _posY
+            ret2 = _posY
             _posY = -1
         }
-        return ret
+        return ret2
     }
 
     function getResultClass(): string {
-        let ret = _className
+        let ret3 = _className
         _className = ''
-        return ret
+        return ret3
     }
 
 
@@ -294,10 +303,10 @@ namespace tabbyvision {
      * When button is pressed
      * @param handler 
      */
-    //% blockId=tabbyvision_on_button_pressed block="on button pressed"
+    //% blockId=tabbyvision_on_button_pressed block="on button |%btn pressed"
     //% weight=98 group="Basic"
-    export function onButtonPressed(handler: () => void): void {
-        btnEvent = handler
+    export function onButtonPressed(btn: BTNCmd, handler: () => void) {
+        control.onEvent(koiNewEventId, btn, handler);
     }
 
     /**
@@ -362,9 +371,9 @@ namespace tabbyvision {
     //% tsclass.fieldEditor="gridpicker"
     //% tsclass.fieldOptions.columns=2
     export function trafficSignGetClass(tsclass: TrafficCard): boolean {
-        let ret = _className == tsclass.toString()
+        let ret4 = _className == tsclass.toString()
         _className = ''
-        return ret
+        return ret4
     }
 
     /**
@@ -415,8 +424,8 @@ namespace tabbyvision {
     //% blockId=tabbyvision_object_tracking_get_class
     //% weight=50 group="Object tracking"
     export function objectTrackingGetClass(object: VOC2012_Object): boolean {
-        let ret = _className == object.toString()
-        return ret
+        let ret5 = _className == object.toString()
+        return ret5
     }
 
     /**
@@ -477,8 +486,8 @@ namespace tabbyvision {
     //% blockId=tabbyvision_classify_image_load block="classify image load classifier %path"
     //% group="Classifier" weight=34
     export function classifyImageLoad(path: string): void {
-        let str = `K44 ${path}`
-        serial.writeLine(str)
+        let str2 = `K44 ${path}`
+        serial.writeLine(str2)
     }
 
 
