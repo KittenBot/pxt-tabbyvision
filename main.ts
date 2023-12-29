@@ -461,7 +461,7 @@ namespace tabbyvision {
      * Line Follower Get Position
      * @returns bias x
      */
-    //% blockId=tabbyvision_line_follower_get_position block="line follower get position"
+    //% blockId=tabbyvision_line_follower_get_position block="line follower get %res"
     //% weight=69 group="Line follower"
     export function lineFollowerGetPosition(res: GetResultXY): number {
         return getResultXY(res)
