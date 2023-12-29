@@ -61,6 +61,8 @@ namespace tabbyvision {
         NumberRecognition = 0x4,
         //% block=ClassifyImage
         ClassifyImage = 0x5,
+        //% block=LetterRecognition
+        LetterRecognition = 0x6,   
     }
 
     export enum CvFunction {
@@ -81,6 +83,8 @@ namespace tabbyvision {
         NumberRecognition = 0x4,
         //% block=ClassifyImage
         ClassifyImage = 0x5,
+        //% block=LetterRecognition
+        LetterRecognition = 0x6,
         //% block=ColorBlobTracking
         ColorBlobTracking = 0x10,
         //% block=LineFollower
@@ -191,6 +195,23 @@ namespace tabbyvision {
         eight = 8,
         //% block="9"
         nine = 9
+    }
+    /**
+    * Letter Card
+    */
+    export enum LetterCard {
+        //% block="A"
+        A = 0,
+        //% block="B"
+        B = 1,
+        //% block="C"
+        C = 2,
+        //% block="D"
+        D = 3,
+        //% block="E"
+        E = 4,
+        //% block="F"
+        F = 5,
     }
 
     /**
@@ -547,6 +568,29 @@ namespace tabbyvision {
             return -1
         }
         return parseInt(transfer)
+    }
+
+
+    /**
+     * Letter Recognition is Letter ?
+     * @param letter LetterCard; eg: LetterCard.6
+     */
+    //% block = "letter recognition letter is %letter ?"
+    //% blockId=tabbyvision_letter_recognition_is_letter 
+    //% weight=30 group="Letter recognition"
+    export function letterRecognitionIsLetter(num: LetterCard): boolean {
+        return getResultClass() == num.toString()
+    }
+
+    /**
+     * Letter Recognition Get Letter
+     */
+    //% block = "letter recognition get letter "
+    //% blockId=tabbyvision_letter_recognition_get_letter 
+    //% weight=30 group="Letter recognition"
+    export function letterRecognitionGetLetter(): string {
+        let transfer = getResultClass()
+        return transfer
     }
 
 }
