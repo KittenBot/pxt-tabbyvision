@@ -1,6 +1,8 @@
 namespace tabbyvision {
 
     let koiNewEventId = 1228
+    type Evtss = (t1: string, t2: string) => void
+    let mqttDataEvt: Evtss = null
 
     // cached results
     let _className: string = ''
@@ -273,6 +275,10 @@ namespace tabbyvision {
                 _className = b[5]
             } else if (cmd == 3) { // btn
                 control.raiseEvent(koiNewEventId, parseInt(b[1]))
+            } else if (cmd == 55) { // btn
+                if (mqttDataEvt) {
+                    mqttDataEvt(b[1], b[2])
+                }
             }
         }
     })
@@ -645,4 +651,79 @@ namespace tabbyvision {
         return getResultXYWH(res)
     }
 
+    /**
+     * @param ssid SSID; eg: ssid
+     * @param pass PASSWORD; eg: password
+     */
+    //% blockId=tabbyvision_join_ap block="Join Ap %ssid %pass"
+    //% group="Wifi" weight=50
+    export function tabbyvision_join_ap(ssid: string, pass: string) {
+        serial.writeLine(`K50 ${ssid} ${pass}`)
+        basic.pause(13000)
+    }
+
+    /**
+     * @param host Mqtt host; eg: iot.kittenbot.cn
+     * @param cid Client ID; eg: clientid
+     * @param port Host Port; eg: 1883
+     * @param user Username; eg: user
+     * @param pass Password; eg: pass
+     */
+    //% blockId=tabbyvision_mqtt_host block="Mqtt Host %host| clientID%cid||Port%port User%user Pass%pass"
+    //% group="Wifi" weight=46
+    export function tabbyvision_mqtt_host(
+        host: string,
+        cid: string,
+        port: number = 1883,
+        user: string = null,
+        pass: string = null
+    ) {
+        if (user && pass) {
+            serial.writeLine(`K51 ${host} ${cid} ${port} ${user} ${pass}`)
+        } else {
+            serial.writeLine(`K51 ${host} ${cid} ${port}`)
+        }
+        basic.pause(2000)
+    }
+
+    /**
+     * @param topic Topic to subscribe; eg: /topic
+     */
+    //% blockId=tabbyvision_mqtt_sub block="Mqtt Subscribe %topic"
+    //% group="Wifi" weight=45
+    export function tabbyvision_mqtt_sub(topic: string) {
+        serial.writeLine(`K52 ${topic}`)
+        basic.pause(500)
+    }
+
+    /**
+     * @param topic Topic to publish; eg: /topic
+     * @param data Data to publish; eg: hello
+     */
+    //% blockId=tabbyvision_mqtt_pub block="Mqtt Publish %topic %data"
+    //% group="Wifi" weight=44
+    export function tabbyvision_mqtt_pub(topic: string, data: string) {
+        serial.writeLine(`K53 ${topic} ${data}`)
+    }
+
+    /**
+     * @param topic Mqtt Read; eg: /topic
+     */
+    //% blockId=tabbyvision_mqtt_read block="Mqtt Read %topic"
+    //% group="Wifi" weight=43
+    export function tabbyvision_mqtt_read(topic: string) {
+        topic = topic || ''
+        let str = `K55 ${topic}`
+        serial.writeLine(str)
+        basic.pause(200)
+
+    }
+
+    //% blockId=tabbyvision_mqtt_onread block="on Mqtt Data"
+    //% group="Wifi" weight=42 draggableParameters=reporter
+    export function tabbyvision_mqtt_onread(
+        handler: (data: string, topic: string) => void
+    ) {
+        mqttDataEvt = handler
+    }
 }
