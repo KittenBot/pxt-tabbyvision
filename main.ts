@@ -411,25 +411,37 @@ namespace tabbyvision {
     }
 
     /**
+     * Traffic Sign Is Class
+     * @returns class
+     */
+    //% block="traffic sign is class %tsclass"
+    //% blockId=tabbyvision_traffic_sign_is_class
+    //% weight=80 group="Traffic sign"
+    //% tsclass.fieldEditor="gridpicker"
+    //% tsclass.fieldOptions.columns=2
+    export function trafficSignIsClass(tsclass: TrafficCard): boolean {
+        let traffic = [""]
+        return _className == traffic[tsclass]
+    }
+
+    /**
      * Traffic Sign Get Class
      * @returns class
      */
-    //% block="traffic sign get class:%tsclass"
+    //% block="traffic sign get class"
     //% blockId=tabbyvision_traffic_sign_get_class
     //% weight=80 group="Traffic sign"
     //% tsclass.fieldEditor="gridpicker"
     //% tsclass.fieldOptions.columns=2
-    export function trafficSignGetClass(tsclass: TrafficCard): boolean {
-        let ret4 = _className == tsclass.toString()
-        _className = ''
-        return ret4
+    export function trafficSignGetClass(): string {
+        return _className
     }
 
     /**
      * Traffic Sign Get Position
      * @returns position; eg: GetResult.result_X
      */
-    //% blockId=tabbyvision_traffic_sign_get_position block="traffic sign get position"
+    //% blockId=tabbyvision_traffic_sign_get_position block="traffic sign get %res"
     //% weight=79 group="Traffic sign"
     export function trafficSignGetPosition(res: GetResult): number {
         return getResultXYWH(res)
@@ -483,7 +495,7 @@ namespace tabbyvision {
      * Object Tracking is Class
      * @param object VOC2012_Object; eg: VOC2012_Object.cat
      */
-    //% block="object tracking is class %object ?"
+    //% block="object tracking is class %object"
     //% blockId=tabbyvision_object_tracking_is_class
     //% weight=50 group="Object tracking"
     export function objectTrackingIsClass(obj: VOC2012_Object): boolean {
@@ -566,10 +578,10 @@ namespace tabbyvision {
 
 
     /**
-     * Number Recognition is Number ?
+     * Number Recognition is Number
      * @param number NumberCard; eg: NumberCard.6
      */
-    //% block = "number recognition number is %number ?"
+    //% block = "number recognition number is %number"
     //% blockId=tabbyvision_number_recognition_is_number 
     //% weight=30 group="Number recognition"
     export function numberRecognitionIsNumber(num: NumberCard): boolean {
@@ -583,16 +595,26 @@ namespace tabbyvision {
     //% blockId=tabbyvision_number_recognition_get_number 
     //% weight=30 group="Number recognition"
     export function numberRecognitionGetNumber(): number {
-        let transfer = getResultClass()
-        if (transfer == ''){
+        let transfer2 = getResultClass()
+        if (transfer2 == ''){
             return -1
         }
-        return parseInt(transfer)
+        return parseInt(transfer2)
+    }
+
+    /**
+    * Number Recognition Get Position
+    */
+    //% block = "number recognition get %res"
+    //% blockId=tabbyvision_number_recognition_get_position
+    //% weight=60 group="Number recognition"
+    export function numberRecognitionGetPosition(res: GetResult): number {
+        return getResultXYWH(res)
     }
 
 
     /**
-     * Letter Recognition is Letter ?
+     * Letter Recognition is Letter
      * @param letter LetterCard; eg: LetterCard.6
      */
     //% block = "letter recognition letter is %letter ?"
@@ -611,6 +633,16 @@ namespace tabbyvision {
     //% weight=30 group="Letter recognition"
     export function letterRecognitionGetLetter(): string {
         return getResultClass()
+    }
+    
+    /**
+    * Letter Recognition Get Position
+    */
+    //% block = "letter recognition get %res"
+    //% blockId=tabbyvision_letter_recognition_get_position
+    //% weight=60 group="Letter recognition"
+    export function letterRecognitionGetPosition(res: GetResult): number {
+        return getResultXYWH(res)
     }
 
 }
