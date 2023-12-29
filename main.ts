@@ -211,7 +211,7 @@ namespace tabbyvision {
         //% block="E"
         E = 4,
         //% block="F"
-        F = 5,
+        F = 5
     }
 
     /**
@@ -276,7 +276,9 @@ namespace tabbyvision {
                 _className = b[5]
             } else if (cmd == 83) { // number recognition
                 _className = b[5]
-            } else if (cmd == 3) { // number recognition
+            } else if (cmd == 84) { // letter recognition
+                _className = b[5]
+            } else if (cmd == 3) { // btn
                 control.raiseEvent(koiNewEventId, parseInt(b[1]))
             }
         }
@@ -578,8 +580,9 @@ namespace tabbyvision {
     //% block = "letter recognition letter is %letter ?"
     //% blockId=tabbyvision_letter_recognition_is_letter 
     //% weight=30 group="Letter recognition"
-    export function letterRecognitionIsLetter(num: LetterCard): boolean {
-        return getResultClass() == num.toString()
+    export function letterRecognitionIsLetter(letter: LetterCard): boolean {
+        let letterList = ["A","B","C","D","E","F"]
+        return getResultClass() == letterList[letter]
     }
 
     /**
@@ -589,8 +592,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_letter_recognition_get_letter 
     //% weight=30 group="Letter recognition"
     export function letterRecognitionGetLetter(): string {
-        let transfer = getResultClass()
-        return transfer
+        return getResultClass()
     }
 
 }
