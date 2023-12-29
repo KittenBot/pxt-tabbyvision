@@ -107,8 +107,6 @@ namespace tabbyvision {
     */
 
     export enum VOC2012_Object {
-        //% block=nothing
-        nothing = -1,
         //% block=aeroplane
         aeroplane = 0,
         //% block=bicycle
@@ -274,7 +272,13 @@ namespace tabbyvision {
                 _posY = parseInt(b[2])
             } else if (cmd == 81) { // traffic sign
                 _className = b[5]
-            } else if (cmd == 83) { // number recognition
+            } else if (cmd == 82) { // object detect
+                _posX = parseInt(b[1])
+                _posY = parseInt(b[2])
+                _posW = parseInt(b[3])
+                _posH = parseInt(b[4])
+                _className = b[5]
+            }  else if (cmd == 83) { // number recognition
                 _className = b[5]
             } else if (cmd == 84) { // letter recognition
                 _className = b[5]
@@ -473,15 +477,26 @@ namespace tabbyvision {
     }
 
     /**
-     * Object Tracking Get Class
+     * Object Tracking is Class
      * @param object VOC2012_Object; eg: VOC2012_Object.cat
      */
-    //% block="object tracking get class: %object"
+    //% block="object tracking is class %object ?"
+    //% blockId=tabbyvision_object_tracking_is_class
+    //% weight=50 group="Object tracking"
+    export function objectTrackingIsClass(obj: VOC2012_Object): boolean {
+        let objectList = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
+        return _className == objectList[obj]
+    }
+
+    /**
+     * Object Tracking Get Class
+     */
+    //% block="object tracking get class"
     //% blockId=tabbyvision_object_tracking_get_class
     //% weight=50 group="Object tracking"
-    export function objectTrackingGetClass(object: VOC2012_Object): boolean {
-        let ret5 = _className == object.toString()
-        return ret5
+    export function objectTrackingGetClass(): string {
+        let ret52 = _className
+        return ret52
     }
 
     /**
