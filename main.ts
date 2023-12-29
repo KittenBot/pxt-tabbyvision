@@ -248,6 +248,7 @@ namespace tabbyvision {
         return n
     }
 
+    let modelCmd: number[] = [81,82,83,84];
     serial.onDataReceived('\n', function () {
         let a = serial.readUntil('\n')
         if (a.charAt(0) == 'K') {
@@ -270,17 +271,11 @@ namespace tabbyvision {
             } else if (cmd == 19) { // line follower color
                 _posX = parseInt(b[1])
                 _posY = parseInt(b[2])
-            } else if (cmd == 81) { // traffic sign
-                _className = b[5]
-            } else if (cmd == 82) { // object detect
+            } else if (modelCmd.indexOf(cmd) != -1) { // model cmd
                 _posX = parseInt(b[1])
                 _posY = parseInt(b[2])
                 _posW = parseInt(b[3])
                 _posH = parseInt(b[4])
-                _className = b[5]
-            }  else if (cmd == 83) { // number recognition
-                _className = b[5]
-            } else if (cmd == 84) { // letter recognition
                 _className = b[5]
             } else if (cmd == 3) { // btn
                 control.raiseEvent(koiNewEventId, parseInt(b[1]))
