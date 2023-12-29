@@ -248,7 +248,7 @@ namespace tabbyvision {
         return n
     }
 
-    let modelCmd: number[] = [81,82,83,84];
+    let modelCmd: number[] = [31,81,82,83,84];
     serial.onDataReceived('\n', function () {
         let a = serial.readUntil('\n')
         if (a.charAt(0) == 'K') {
@@ -257,12 +257,6 @@ namespace tabbyvision {
             let cmd = parseInt(b[0])
             if (cmd == 42) { // feature extraction
                 _className = b[1]
-            } else if (cmd == 31) { // face tracking
-                _posX = parseInt(b[1])
-                _posY = parseInt(b[2])
-                _posW = parseInt(b[3])
-                _posH = parseInt(b[4])
-                _className = b[5]
             } else if (cmd == 15) { // color blob tracking
                 _posX = parseInt(b[1])
                 _posY = parseInt(b[2])
@@ -469,6 +463,20 @@ namespace tabbyvision {
     //% weight=60 group="Face tracking"
     export function faceTrackingGetPosition(res: GetResult): number {
         return getResultXYWH(res)
+    }
+
+    /**
+    * Face Tracking Get Quantity
+    */
+    //% block = "face tracking get quantity"
+    //% blockId=tabbyvision_face_tracking_get_quantity
+    //% weight=60 group="Face tracking"
+    export function faceTrackingGetQuantity(): number {
+        let transfer = _className
+        if (transfer==""){
+            return 0
+        }
+        return parseInt(transfer)
     }
 
     /**
