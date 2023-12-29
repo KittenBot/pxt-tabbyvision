@@ -26,6 +26,30 @@ namespace tabbyvision {
         AB = 3
     }
 
+    export enum ColorList {
+        //% block="Red"
+        Red = 0,
+        //% block="Blue"
+        Blue = 1,
+        //% block="Green"
+        Green = 2,
+        //% block="Yellow"
+        Yellow = 3,
+        //% block="Orange"
+        Orange = 4,
+        //% block="Purple"
+        Purple = 5,
+        //% block="Pink"
+        Pink = 6,
+        //% block="White"
+        White = 7,
+        //% block="Black"
+        Black = 8,
+        //% block="Custom"
+        Custom = 9,
+    }
+
+
     export enum ModelFunction {
         //% block=TrafficSign
         TrafficSign = 0x1,
@@ -343,8 +367,17 @@ namespace tabbyvision {
     //% blockId=tabbyvision_color_blob_tracking_set_color block="color blob tracking set color %color"
     //% color.shadow="colorNumberPicker"
     //% weight=90 group="Color blob tracking"
-    export function colorObjectTrackingSetColor(color: number): void {
+    export function colorObjectTrackingSetColor(color: ColorList): void {
         serial.writeLine(`K18 ${color}`)
+    }
+
+    /**
+     * Color Blob Tracking Calibrate Color
+     */
+    //% blockId=tabbyvision_color_blob_tracking_calibrate block="color blob tracking calibrate"
+    //% weight=90 group="Color blob tracking"
+    export function colorObjectTrackingCalibrate(): void {
+        serial.writeLine(`K16`)
     }
 
     /**
@@ -492,14 +525,28 @@ namespace tabbyvision {
 
 
     /**
-     * Number Recognition Get Number
+     * Number Recognition is Number ?
      * @param number NumberCard; eg: NumberCard.6
      */
-    //% block = "number recognition get number %number "
+    //% block = "number recognition number is %number ?"
+    //% blockId=tabbyvision_number_recognition_is_number 
+    //% weight=30 group="Number recognition"
+    export function numberRecognitionIsNumber(num: NumberCard): boolean {
+        return getResultClass() == num.toString()
+    }
+
+    /**
+     * Number Recognition Get Number
+     */
+    //% block = "number recognition get number "
     //% blockId=tabbyvision_number_recognition_get_number 
     //% weight=30 group="Number recognition"
-    export function numberRecognitionGetNumber(number: NumberCard): boolean {
-        return getResultClass() == number.toString()
+    export function numberRecognitionGetNumber(): number {
+        let transfer = getResultClass()
+        if (transfer == ''){
+            return -1
+        }
+        return parseInt(transfer)
     }
 
 }
