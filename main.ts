@@ -91,6 +91,8 @@ namespace tabbyvision {
         ColorBlobTracking = 0x10,
         //% block=LineFollower
         LineFollower = 0x20,
+        //% block=Iot
+        Iot = 0x80,
     }
 
     export enum ColorNames {
@@ -713,8 +715,8 @@ namespace tabbyvision {
     //% group="Wifi" weight=43
     export function tabbyvision_mqtt_read(topic: string) {
         topic = topic || ''
-        let str = `K55 ${topic}`
-        serial.writeLine(str)
+        let str3 = `K55 ${topic}`
+        serial.writeLine(str3)
         basic.pause(200)
 
     }
