@@ -155,20 +155,20 @@ namespace tabbyvision {
     * Traffic sign Card
     */
     export enum TrafficCard {
+        //% block="Around"
+        Around = 0,
         //% block="Forward"
-        forward = 1,
-        //% block="Turn around"
-        turnaround = 2,
+        Forward = 1,
         //% block="Left"
-        left = 3,
+        left = 2,
         //% block="Right"
-        right = 4,
+        Right = 3,
+        //% block="Limiting30"
+        Limiting30 = 4,
         //% block="Stop"
-        stop = 5,
-        //% block="Speed limit"
-        speedlimit = 6,
+        Stop = 5,
         //% block="Tunnel"
-        tunnel = 7
+        Tunnel = 6
     }
 
     /**
@@ -426,7 +426,7 @@ namespace tabbyvision {
     //% tsclass.fieldEditor="gridpicker"
     //% tsclass.fieldOptions.columns=2
     export function trafficSignIsClass(tsclass: TrafficCard): boolean {
-        let traffic = [""]
+        let traffic = ["around","forward","left","right","limiting30","stop","tunnel"]
         return _className == traffic[tsclass]
     }
 
