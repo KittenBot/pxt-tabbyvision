@@ -606,10 +606,10 @@ namespace tabbyvision {
      * Classify Image Save
      * @param path json to save; eg: model.json
      */
-    //% blockId=tabbyvision_classify_image_save block="classify image save classifier %path"
+    //% blockId=tabbyvision_classify_image_save block="classify image save model to local"
     //% group="Classifier" weight=35
-    export function classifyImageSave(path: string): void {
-        let str = `K43 ${path}`
+    export function classifyImageSave(): void {
+        let str = `K43 /flash/clsData.json`
         serial.writeLine(str)
     }
 
@@ -617,10 +617,10 @@ namespace tabbyvision {
      * Classify Image Load
      * @param path json to load; eg: model.json
      */
-    //% blockId=tabbyvision_classify_image_load block="classify image load classifier %path"
+    //% blockId=tabbyvision_classify_image_load block="classify image load model from local"
     //% group="Classifier" weight=34
-    export function classifyImageLoad(path: string): void {
-        let str2 = `K44 ${path}`
+    export function classifyImageLoad(): void {
+        let str2 = `K44 /flash/clsData.json`
         serial.writeLine(str2)
     }
 
