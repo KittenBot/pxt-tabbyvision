@@ -670,7 +670,7 @@ namespace tabbyvision {
     //% weight=30 group="Letter recognition"
     export function letterRecognitionIsLetter(letter: LetterCard): boolean {
         let letterList = ["A","B","C","D","E","F"]
-        return getResultClass() == letterList[letter]
+        return _className == letterList[letter]
     }
 
     /**
