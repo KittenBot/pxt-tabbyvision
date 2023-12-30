@@ -10,6 +10,10 @@ namespace tabbyvision {
     let _posY: number = -1
     let _posW: number = -1
     let _posH: number = -1
+    let _lineX1: number = -1
+    let _lineY1: number = -1
+    let _lineX2: number = -1
+    let _lineY2: number = -1
 
 
     export enum LCD_Direction {
@@ -102,6 +106,8 @@ namespace tabbyvision {
         blue = 2,
         //% block=yellow
         yellow = 3,
+        //% block=black
+        black = 4,
     }
 
 
@@ -240,6 +246,20 @@ namespace tabbyvision {
         result_Y = 2
     }
 
+    /**
+     * Result line
+     */
+    export enum Getline {
+        //% block="X1"
+        result_X1 = 1,
+        //% block="Y1"
+        result_Y1 = 2,
+        //% block="X2"
+        result_X2 = 3,
+        //% block="Y2"
+        result_Y2 = 4
+    }
+
 
 
 
@@ -267,8 +287,10 @@ namespace tabbyvision {
                 _posW = parseInt(b[3])
                 _posH = parseInt(b[4])
             } else if (cmd == 19) { // line follower color
-                _posX = parseInt(b[1])
-                _posY = parseInt(b[2])
+                _lineX1 = parseInt(b[1])
+                _lineY1 = parseInt(b[2])
+                _lineX2 = parseInt(b[3])
+                _lineY2 = parseInt(b[4])
             } else if (modelCmd.indexOf(cmd) != -1) { // model cmd
                 _posX = parseInt(b[1])
                 _posY = parseInt(b[2])
@@ -319,6 +341,24 @@ namespace tabbyvision {
         let ret3 = _className
         _className = ''
         return ret3
+    }
+
+    function getlineXY(res: Getline): number {
+        let ret4 = -1
+        if (res == Getline.result_X1) {
+            ret4 = _lineX1
+            _lineX1 = -1
+        } else if (res == Getline.result_Y1) {
+            ret4 = _lineY1
+            _lineY1 = -1
+        } else if (res == Getline.result_X2) {
+            ret4 = _lineX2
+            _lineX2 = -1
+        } else if (res == Getline.result_Y2) {
+            ret4 = _lineY2
+            _lineY2 = -1
+        }
+        return ret4
     }
 
 
@@ -462,7 +502,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_line_follower_set_threshold block="line follower set threshold %threshold"
     //% weight=70 group="Line follower"
     export function lineFollowerSetThreshold(key: ColorNames) {
-        serial.writeLine(`K19 ${key}`)
+        serial.writeLine(`K18 ${key}`)
     }
 
     /**
@@ -471,8 +511,8 @@ namespace tabbyvision {
      */
     //% blockId=tabbyvision_line_follower_get_position block="line follower get %res"
     //% weight=69 group="Line follower"
-    export function lineFollowerGetPosition(res: GetResultXY): number {
-        return getResultXY(res)
+    export function lineFollowerGetPosition(res: Getline): number {
+        return getlineXY(res)
     }
 
     /**
