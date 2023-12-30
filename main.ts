@@ -633,7 +633,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_number_recognition_is_number 
     //% weight=30 group="Number recognition"
     export function numberRecognitionIsNumber(num: NumberCard): boolean {
-        return getResultClass() == num.toString()
+        return _className == num.toString()
     }
 
     /**
