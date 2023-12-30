@@ -163,7 +163,7 @@ namespace tabbyvision {
     * Traffic sign Card
     */
     export enum TrafficCard {
-        //% block="Around"
+        //% block="U-Turn"
         Around = 0,
         //% block="Forward"
         Forward = 1,
@@ -171,7 +171,7 @@ namespace tabbyvision {
         left = 2,
         //% block="Right"
         Right = 3,
-        //% block="Limiting30"
+        //% block="Speed Limit 30"
         Limiting30 = 4,
         //% block="Stop"
         Stop = 5,
