@@ -1,4 +1,5 @@
 //% color="#5c7cfa" weight=10 icon="\uf06e"
+//% groups='["Basic", "Face tracking", "Color blob tracking", "Line follower","Classifier",  "Traffic sign", "Number recognition", "Letter recognition","Object tracking","WIFI"]'
 //% block="TabbyVision"
 
 namespace tabbyvision {
@@ -701,7 +702,7 @@ namespace tabbyvision {
      * @param pass PASSWORD; eg: password
      */
     //% blockId=tabbyvision_join_ap block="Join Ap %ssid %pass"
-    //% group="Wifi" weight=50
+    //% group="WIFI" weight=50
     export function tabbyvision_join_ap(ssid: string, pass: string) {
         serial.writeLine(`K50 ${ssid} ${pass}`)
         basic.pause(13000)
@@ -715,7 +716,7 @@ namespace tabbyvision {
      * @param pass Password; eg: pass
      */
     //% blockId=tabbyvision_mqtt_host block="Mqtt Host %host| clientID%cid||Port%port User%user Pass%pass"
-    //% group="Wifi" weight=46
+    //% group="WIFI" weight=46
     export function tabbyvision_mqtt_host(
         host: string,
         cid: string,
@@ -735,7 +736,7 @@ namespace tabbyvision {
      * @param topic Topic to subscribe; eg: /topic
      */
     //% blockId=tabbyvision_mqtt_sub block="Mqtt Subscribe %topic"
-    //% group="Wifi" weight=45
+    //% group="WIFI" weight=45
     export function tabbyvision_mqtt_sub(topic: string) {
         serial.writeLine(`K52 ${topic}`)
         basic.pause(500)
@@ -746,7 +747,7 @@ namespace tabbyvision {
      * @param data Data to publish; eg: hello
      */
     //% blockId=tabbyvision_mqtt_pub block="Mqtt Publish %topic %data"
-    //% group="Wifi" weight=44
+    //% group="WIFI" weight=44
     export function tabbyvision_mqtt_pub(topic: string, data: string) {
         serial.writeLine(`K53 ${topic} ${data}`)
     }
@@ -755,7 +756,7 @@ namespace tabbyvision {
      * @param topic Mqtt Read; eg: /topic
      */
     //% blockId=tabbyvision_mqtt_read block="Mqtt Read %topic"
-    //% group="Wifi" weight=43
+    //% group="WIFI" weight=43
     export function tabbyvision_mqtt_read(topic: string) {
         topic = topic || ''
         let str3 = `K55 ${topic}`
@@ -765,7 +766,7 @@ namespace tabbyvision {
     }
 
     //% blockId=tabbyvision_mqtt_onread block="on Mqtt Data"
-    //% group="Wifi" weight=42 draggableParameters=reporter
+    //% group="WIFI" weight=42 draggableParameters=reporter
     export function tabbyvision_mqtt_onread(
         handler: (data: string, topic: string) => void
     ) {
