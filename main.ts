@@ -1,3 +1,6 @@
+//% color="#5c7cfa" weight=10 icon="\uf06e"
+//% block="TabbyVision"
+
 namespace tabbyvision {
 
     let koiNewEventId = 1228
