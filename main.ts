@@ -468,7 +468,7 @@ namespace tabbyvision {
     //% tsclass.fieldEditor="gridpicker"
     //% tsclass.fieldOptions.columns=2
     export function trafficSignIsClass(tsclass: TrafficCard): boolean {
-        let traffic = ["around","forward","left","right","limiting30","stop","tunnel"]
+        let traffic = ["U-Turn","forward","left","right","limiting30","stop","tunnel"]
         return _className == traffic[tsclass]
     }
 
