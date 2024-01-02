@@ -43,18 +43,6 @@ namespace tabbyvision {
         Blue = 1,
         //% block="Green"
         Green = 2,
-        //% block="Yellow"
-        Yellow = 3,
-        //% block="Orange"
-        Orange = 4,
-        //% block="Purple"
-        Purple = 5,
-        //% block="Pink"
-        Pink = 6,
-        //% block="White"
-        White = 7,
-        //% block="Black"
-        Black = 8,
         //% block="Custom"
         Custom = 9,
     }
