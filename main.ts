@@ -93,13 +93,15 @@ namespace tabbyvision {
 
     export enum ColorNames {
         //% block=red
-        red = 1,
+        red = 0,
         //% block=blue
-        blue = 2,
+        blue = 1,
         //% block=yellow
-        yellow = 3,
+        yellow = 2,
         //% block=black
-        black = 4,
+        black = 3,
+        //% block="Custom"
+        Custom = 4,
     }
 
 
@@ -488,11 +490,20 @@ namespace tabbyvision {
     }
 
     /**
+     * Line Follower calibration
+     */
+    //% blockId=tabbyvision_line_follower_calibration block="line follower calibration"
+    //% weight=70 group="Line follower"
+    export function lineFollowerCalibration() {
+        serial.writeLine(`K16`)
+    }
+
+    /**
      * Line Follower Set Key Color
      * @param color
      */
     //% blockId=tabbyvision_line_follower_set_threshold block="line follower set threshold %threshold"
-    //% weight=70 group="Line follower"
+    //% weight=71 group="Line follower"
     export function lineFollowerSetThreshold(key: ColorNames) {
         serial.writeLine(`K18 ${key}`)
     }
