@@ -41,8 +41,6 @@ namespace tabbyvision {
         Red = 0,
         //% block="Blue"
         Blue = 1,
-        //% block="Green"
-        Green = 2,
         //% block="Custom"
         Custom = 9,
     }
