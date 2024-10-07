@@ -1,7 +1,6 @@
 //% color="#5c7cfa" weight=10 icon="\uf06e"
 //% groups='["Basic", "Face tracking", "Color blob tracking", "Line follower","Classifier",  "Traffic sign", "Number recognition", "Letter recognition","Object tracking","WIFI"]'
 //% block="TabbyVision"
-
 namespace tabbyvision {
 
     let koiNewEventId = 1228
@@ -58,7 +57,7 @@ namespace tabbyvision {
         //% block=ClassifyImage
         ClassifyImage = 0x5,
         //% block=LetterRecognition
-        LetterRecognition = 0x6,   
+        LetterRecognition = 0x6,
     }
 
     export enum CvFunction {
@@ -264,7 +263,7 @@ namespace tabbyvision {
         return n
     }
 
-    let modelCmd: number[] = [31,81,82,83,84];
+    let modelCmd: number[] = [31, 81, 82, 83, 84];
     serial.onDataReceived('\n', function () {
         let a = serial.readUntil('\n')
         if (a.charAt(0) == 'K') {
@@ -284,14 +283,22 @@ namespace tabbyvision {
                 _lineX2 = parseInt(b[3])
                 _lineY2 = parseInt(b[4])
             } else if (modelCmd.indexOf(cmd) != -1) { // model cmd
-                _posX = parseInt(b[1])
-                _posY = parseInt(b[2])
-                _posW = parseInt(b[3])
-                _posH = parseInt(b[4])
-                _className = b[5]
+                if (b.length > 1) {
+                    _posX = parseInt(b[1])
+                    _posY = parseInt(b[2])
+                    _posW = parseInt(b[3])
+                    _posH = parseInt(b[4])
+                    _className = b[5]
+                } else {
+                    _posX = _posY = _posW = _posH = 0
+                    _className = ""
+                    if (cmd == 83) {
+                        _className = "-1"
+                    }
+                }
             } else if (cmd == 3) { // btn
                 control.raiseEvent(koiNewEventId, parseInt(b[1]))
-            } else if (cmd == 55) { // btn
+            } else if (cmd == 55) { // mqtt
                 if (mqttDataEvt) {
                     mqttDataEvt(b[1], b[2])
                 }
@@ -412,7 +419,7 @@ namespace tabbyvision {
     //% model.fieldOptions.columns=3
     //% advanced=true
     export function enableModelCV(model: ModelFunction, cv: CvFunction): void {
-        serial.writeLine(`K97 ${model+cv}`)
+        serial.writeLine(`K97 ${model + cv}`)
     }
 
 
@@ -460,7 +467,7 @@ namespace tabbyvision {
     //% tsclass.fieldEditor="gridpicker"
     //% tsclass.fieldOptions.columns=2
     export function trafficSignIsClass(tsclass: TrafficCard): boolean {
-        let traffic = ["U-Turn", "forward", "left", "right","limit-30","stop","tunnel"]
+        let traffic = ["U-Turn", "forward", "left", "right", "limit-30", "stop", "tunnel"]
         return _className == traffic[tsclass]
     }
 
@@ -534,7 +541,7 @@ namespace tabbyvision {
     //% weight=60 group="Face tracking"
     export function faceTrackingGetQuantity(): number {
         let transfer = _className
-        if (transfer==""){
+        if (transfer == "") {
             return 0
         }
         return parseInt(transfer)
@@ -645,7 +652,7 @@ namespace tabbyvision {
     //% weight=30 group="Number recognition"
     export function numberRecognitionGetNumber(): number {
         let transfer2 = getResultClass()
-        if (transfer2 == ''){
+        if (transfer2 == '') {
             return -1
         }
         return parseInt(transfer2)
@@ -670,7 +677,7 @@ namespace tabbyvision {
     //% blockId=tabbyvision_letter_recognition_is_letter 
     //% weight=30 group="Letter recognition"
     export function letterRecognitionIsLetter(letter: LetterCard): boolean {
-        let letterList = ["A","B","C","D","E","F"]
+        let letterList = ["A", "B", "C", "D", "E", "F"]
         return _className == letterList[letter]
     }
 
@@ -683,7 +690,7 @@ namespace tabbyvision {
     export function letterRecognitionGetLetter(): string {
         return getResultClass()
     }
-    
+
     /**
     * Letter Recognition Get Position
     */
