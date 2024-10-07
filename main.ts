@@ -1,5 +1,5 @@
 //% color="#5c7cfa" weight=10 icon="\uf06e"
-//% groups='["Basic", "Face tracking", "Color blob tracking", "Line follower","Classifier",  "Traffic sign", "Number recognition", "Letter recognition","Object tracking","WIFI"]'
+//% groups='["Basic", "Face tracking", "Line follower", "Color tracking" ,"Classifier", "Object recognition", "Traffic sign recognition", "Number recognition", "Letter recognition","WIFI"]'
 //% block="TabbyVision"
 namespace tabbyvision {
 
@@ -20,9 +20,9 @@ namespace tabbyvision {
 
 
     export enum LCD_Direction {
-        //% block=Front
+        //% block=front
         Front = 0,
-        //% block=Back
+        //% block=back
         Back = 2
     }
 
@@ -36,68 +36,68 @@ namespace tabbyvision {
     }
 
     export enum ColorList {
-        //% block="Red"
+        //% block="red"
         Red = 0,
-        //% block="Blue"
+        //% block="blue"
         Blue = 1,
-        //% block="Custom"
+        //% block="custom"
         Custom = 9,
     }
 
 
     export enum ModelFunction {
-        //% block=TrafficSign
+        //% block="traffic sign recognition"
         TrafficSign = 0x1,
-        //% block=ObjectTracking
+        //% block="object recognition"
         ObjectTracking = 0x2,
-        //% block=FaceTracking
+        //% block="face tracking"
         FaceTracking = 0x3,
-        //% block=NumberRecognition
+        //% block="number recognition"
         NumberRecognition = 0x4,
-        //% block=ClassifyImage
+        //% block="image classification"
         ClassifyImage = 0x5,
-        //% block=LetterRecognition
+        //% block="letter recognition"
         LetterRecognition = 0x6,
     }
 
     export enum CvFunction {
-        //% block=ColorBlobTracking
+        //% block="color tracking"
         ColorBlobTracking = 0x10,
-        //% block=LineFollower
+        //% block="line follower"
         LineFollower = 0x20,
     }
 
     export enum FullFunction {
-        //% block=TrafficSign
-        TrafficSign = 0x1,
-        //% block=ObjectTracking
-        ObjectTracking = 0x2,
-        //% block=FaceTracking
+        //% block="face tracking"
         FaceTracking = 0x3,
-        //% block=NumberRecognition
-        NumberRecognition = 0x4,
-        //% block=ClassifyImage
-        ClassifyImage = 0x5,
-        //% block=LetterRecognition
-        LetterRecognition = 0x6,
-        //% block=ColorBlobTracking
-        ColorBlobTracking = 0x10,
-        //% block=LineFollower
+        //% block="line follower"
         LineFollower = 0x20,
-        //% block=Iot
+        //% block="color tracking"
+        ColorBlobTracking = 0x10,
+        //% block="image classification"
+        ClassifyImage = 0x5,
+        //% block="object recognition"
+        ObjectTracking = 0x2,
+        //% block="traffic sign recognition"
+        TrafficSign = 0x1,
+        //% block="number recognition"
+        NumberRecognition = 0x4,
+        //% block="letter recognition"
+        LetterRecognition = 0x6,
+        //% block="iot"
         Iot = 0x80,
     }
 
     export enum ColorNames {
+        //% block=black
+        black = 3,
         //% block=red
         red = 0,
         //% block=blue
         blue = 1,
         //% block=yellow
         yellow = 2,
-        //% block=black
-        black = 3,
-        //% block="Custom"
+        //% block="custom"
         Custom = 4,
     }
 
@@ -151,7 +151,7 @@ namespace tabbyvision {
     }
 
     /*
-    * Traffic sign Card
+    * Traffic sign recognition Card
     */
     export enum TrafficCard {
         //% block="U-Turn"
@@ -217,13 +217,13 @@ namespace tabbyvision {
     * Result list
     */
     export enum GetResult {
-        //% block="X"
+        //% block="x"
         result_X = 1,
-        //% block="Y"
+        //% block="y"
         result_Y = 2,
-        //% block="W"
+        //% block="w"
         result_W = 3,
-        //% block="H"
+        //% block="h"
         result_H = 4
     }
 
@@ -241,13 +241,13 @@ namespace tabbyvision {
      * Result line
      */
     export enum Getline {
-        //% block="X1"
+        //% block="x1"
         result_X1 = 1,
-        //% block="Y1"
+        //% block="y1"
         result_Y1 = 2,
-        //% block="X2"
+        //% block="x2"
         result_X2 = 3,
-        //% block="Y2"
+        //% block="y2"
         result_Y2 = 4
     }
 
@@ -375,7 +375,7 @@ namespace tabbyvision {
      * @param tx Tx pin; eg: SerialPin.P13
      * @param rx Rx pin; eg: SerialPin.P14
      */
-    //% blockId=tabbyvision_init block="init tabbyvision Tx %tx Rx %rx"
+    //% blockId=tabbyvision_init block="init tabbyvision pins TX %tx RX %rx"
     //% weight=100 group="Basic"
     export function init(tx: SerialPin, rx: SerialPin): void {
         serial.redirect(tx, rx, BaudRate.BaudRate115200);
@@ -386,11 +386,22 @@ namespace tabbyvision {
     }
 
     /**
-     * LCD Direction
-     * @param dir Direction; eg: 0
+     * Switch Function
      */
-    //% blockId=tabbyvision_lcd_direction block="LCD direction %dir"
+    //% blockId=tabbyvision_switch_function block="switch function %func"
     //% weight=99 group="Basic"
+    //% func.fieldEditor="gridpicker"
+    //% func.fieldOptions.columns=3
+    export function switchFunction(func: FullFunction): void {
+        serial.writeLine(`K97 ${func}`)
+    }
+
+    /**
+     * screen direction
+     * @param Front Direction; eg: 0
+     */
+    //% blockId=tabbyvision_lcd_direction block="set screen direction %dir"
+    //% weight=98 group="Basic"
     export function lcdDirection(dir: LCD_Direction): void {
         serial.writeLine(`K6 ${dir}`)
     }
@@ -400,29 +411,18 @@ namespace tabbyvision {
      * @param handler 
      */
     //% blockId=tabbyvision_on_button_pressed block="on button |%btn pressed"
-    //% weight=98 group="Basic"
+    //% weight=97 group="Basic"
     export function onButtonPressed(btn: BTNCmd, handler: () => void) {
         control.onEvent(koiNewEventId, btn, handler);
     }
 
-    /**
-     * Switch Function
-     * @param func Function; eg: LineFollower
-     */
-    //% blockId=tabbyvision_switch_function block="switch function %func"
-    //% weight=97 group="Basic"
-    //% func.fieldEditor="gridpicker"
-    //% func.fieldOptions.columns=3
-    export function switchFunction(func: FullFunction): void {
-        serial.writeLine(`K97 ${func}`)
-    }
 
     /**
      * Enable Model + CV
      * @param model Function; eg: FaceTracking
      * @param cv Function; eg: ColorBlobTracking
      */
-    //% blockId=tabbyvision_enable_model_cv block="enable model %model cv %cv"
+    //% blockId=tabbyvision_enable_model_cv block="enable function %model and %cv"
     //% weight=96 group="Basic"
     //% model.fieldEditor="gridpicker"
     //% model.fieldOptions.columns=3
@@ -436,9 +436,9 @@ namespace tabbyvision {
      * Color Blob Tracking Set Color
      * @param color 
      */
-    //% blockId=tabbyvision_color_blob_tracking_set_color block="color blob tracking set color %color"
+    //% blockId=tabbyvision_color_blob_tracking_set_color block="color tracking set target color %color"
     //% color.shadow="colorNumberPicker"
-    //% weight=90 group="Color blob tracking"
+    //% weight=90 group="Color tracking"
     export function colorObjectTrackingSetColor(color: ColorList): void {
         serial.writeLine(`K18 ${color}`)
     }
@@ -446,29 +446,29 @@ namespace tabbyvision {
     /**
      * Color Blob Tracking Calibrate Color
      */
-    //% blockId=tabbyvision_color_blob_tracking_calibrate block="color blob tracking calibrate"
-    //% weight=90 group="Color blob tracking"
+    //% blockId=tabbyvision_color_blob_tracking_calibrate block="color tracking calibrate target color"
+    //% weight=89 group="Color tracking"
     export function colorObjectTrackingCalibrate(): void {
         serial.writeLine(`K16`)
     }
 
     /**
-     * Color Blob Tracking Get Result
+     * Color Blob Tracking Get Value
      */
-    //% block = "color blob tracking get result %res"
-    //% blockId=tabbyvision_color_blob_tracking_get_result
-    //% weight=89 group="Color blob tracking"
+    //% blockId=tabbyvision_color_blob_tracking_get_result block="color tracking get value %res"
+    //% weight=88 group="Color tracking"
     export function colorObjectTrackingGetPosition(res: GetResult): number {
         return getResultXYWH(res)
     }
+
+
 
     /**
      * Traffic Sign Is Class
      * @returns class
      */
-    //% block="traffic sign is class %tsclass"
-    //% blockId=tabbyvision_traffic_sign_is_class
-    //% weight=80 group="Traffic sign"
+    //% blockId=tabbyvision_traffic_sign_is_class block="traffic sign recognition is name %tsclass?"
+    //% weight=80 group="Traffic sign recognition"
     //% tsclass.fieldEditor="gridpicker"
     //% tsclass.fieldOptions.columns=2
     export function trafficSignIsClass(tsclass: TrafficCard): boolean {
@@ -480,9 +480,8 @@ namespace tabbyvision {
      * Traffic Sign Get Class
      * @returns class
      */
-    //% block="traffic sign get class"
-    //% blockId=tabbyvision_traffic_sign_get_class
-    //% weight=80 group="Traffic sign"
+    //% blockId=tabbyvision_traffic_sign_get_class block="traffic sign recognition get name"
+    //% weight=80 group="Traffic sign recognition"
     //% tsclass.fieldEditor="gridpicker"
     //% tsclass.fieldOptions.columns=2
     export function trafficSignGetClass(): string {
@@ -493,8 +492,8 @@ namespace tabbyvision {
      * Traffic Sign Get Position
      * @returns position; eg: GetResult.result_X
      */
-    //% blockId=tabbyvision_traffic_sign_get_position block="traffic sign get %res"
-    //% weight=79 group="Traffic sign"
+    //% blockId=tabbyvision_traffic_sign_get_position block="traffic sign recognition get value %res"
+    //% weight=79 group="Traffic sign recognition"
     export function trafficSignGetPosition(res: GetResult): number {
         return getResultXYWH(res)
     }
@@ -502,7 +501,7 @@ namespace tabbyvision {
     /**
      * Line Follower calibration
      */
-    //% blockId=tabbyvision_line_follower_calibration block="line follower calibration"
+    //% blockId=tabbyvision_line_follower_calibration block="line follower calibrate target color"
     //% weight=70 group="Line follower"
     export function lineFollowerCalibration() {
         serial.writeLine(`K16`)
@@ -510,9 +509,9 @@ namespace tabbyvision {
 
     /**
      * Line Follower Set Key Color
-     * @param color
+     * @param color eg: ColorNames.black
      */
-    //% blockId=tabbyvision_line_follower_set_threshold block="line follower set threshold %threshold"
+    //% blockId=tabbyvision_line_follower_set_threshold block="line follower set target color %threshold"
     //% weight=71 group="Line follower"
     export function lineFollowerSetThreshold(key: ColorNames) {
         serial.writeLine(`K18 ${key}`)
@@ -522,7 +521,7 @@ namespace tabbyvision {
      * Line Follower Get Position
      * @returns bias x
      */
-    //% blockId=tabbyvision_line_follower_get_position block="line follower get %res"
+    //% blockId=tabbyvision_line_follower_get_position block="line follower get value %res"
     //% weight=69 group="Line follower"
     export function lineFollowerGetPosition(res: Getline): number {
         return getlineXY(res)
@@ -531,8 +530,7 @@ namespace tabbyvision {
     /**
     * Face Tracking Get Position 
     */
-    //% block = "face tracking get %res"
-    //% blockId=tabbyvision_face_tracking_get_position
+    //% blockId=tabbyvision_face_tracking_get_position block="face tracking get value %res"
     //% weight=60 group="Face tracking"
     export function faceTrackingGetPosition(res: GetResult): number {
         return getResultXYWH(res)
@@ -553,53 +551,43 @@ namespace tabbyvision {
     }
 
     /**
-     * Object Tracking is Class
+     * Object Recognition is Class
      * @param object VOC2012_Object; eg: VOC2012_Object.cat
      */
-    //% block="object tracking is class %object"
-    //% blockId=tabbyvision_object_tracking_is_class
-    //% weight=50 group="Object tracking"
+    //% blockId=tabbyvision_object_tracking_is_class block="object recognition is name %object?"
+    //% weight=50 group="Object recognition"
     export function objectTrackingIsClass(obj: VOC2012_Object): boolean {
         let objectList = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
         return _className == objectList[obj]
     }
 
     /**
-     * Object Tracking Get Class
+     * Object Recognition Get Class
      */
-    //% block="object tracking get class"
-    //% blockId=tabbyvision_object_tracking_get_class
-    //% weight=50 group="Object tracking"
+    //% blockId=tabbyvision_object_tracking_get_class block="object recognition get name"
+    //% weight=50 group="Object recognition"
     export function objectTrackingGetClass(): string {
         let ret52 = _className
         return ret52
     }
 
     /**
-     * Object Tracking Get Position
+     * Object Recognition Get Position
      * @param axis for x; eg: GetResult.result_X
      * @returns position
      */
-    //% blockId=tabbyvision_object_tracking_get_position block="object tracking get position %axis"
-    //% weight=49 group="Object tracking"
+    //% blockId=tabbyvision_object_tracking_get_position block="object recognition get value %axis"
+    //% weight=49 group="Object recognition"
     export function objectTrackingGetPosition(axis: GetResult): number {
         return getResultXYWH(axis)
     }
 
-    /**
-     * Classify Image Reset
-     */
-    //% blockId=tabbyvision_classify_image_reset block="classify image reset"
-    //% weight=40 group="Classifier"
-    export function classifyImageReset(): void {
-        serial.writeLine(`K45`)
-    }
 
     /**
      * Classify Image Add Tag
      * @param name tag; eg: apple
      */
-    //% blockId=tabbyvision_classify_image_add_tag block="classify image add tag %name"
+    //% blockId=tabbyvision_classify_image_add_tag block="image classification add class label %name"
     //% weight=39 group="Classifier"
     export function classifyImageAddTagID(name: string): void {
         serial.writeLine(`K41 ${name}`)
@@ -609,7 +597,7 @@ namespace tabbyvision {
      * Classify Image Get Class
      * @returns class
      */
-    //% blockId=tabbyvision_classify_image_get_class block="classify image get class"
+    //% blockId=tabbyvision_classify_image_get_class block="image classification get class label"
     //% weight=38 group="Classifier"
     export function classifyImageGetClass(): string {
         return getResultClass()
@@ -619,7 +607,7 @@ namespace tabbyvision {
      * Classify Image Save
      * @param path json to save; eg: model.json
      */
-    //% blockId=tabbyvision_classify_image_save block="classify image save model to local"
+    //% blockId=tabbyvision_classify_image_save block="image classification save model to local"
     //% group="Classifier" weight=35
     export function classifyImageSave(): void {
         let str = `K43 /flash/clsData.json`
@@ -630,11 +618,20 @@ namespace tabbyvision {
      * Classify Image Load
      * @param path json to load; eg: model.json
      */
-    //% blockId=tabbyvision_classify_image_load block="classify image load model from local"
+    //% blockId=tabbyvision_classify_image_load block="image classification load model from local"
     //% group="Classifier" weight=34
     export function classifyImageLoad(): void {
         let str2 = `K44 /flash/clsData.json`
         serial.writeLine(str2)
+    }
+
+    /**
+     * Classify Image Reset
+     */
+    //% blockId=tabbyvision_classify_image_reset block="image classification reset"
+    //% weight=33 group="Classifier"
+    export function classifyImageReset(): void {
+        serial.writeLine(`K45`)
     }
 
 
@@ -642,9 +639,8 @@ namespace tabbyvision {
      * Number Recognition is Number
      * @param number NumberCard; eg: NumberCard.6
      */
-    //% block = "number recognition number is %number"
-    //% blockId=tabbyvision_number_recognition_is_number 
-    //% weight=30 group="Number recognition"
+    //% blockId=tabbyvision_number_recognition_is_number block="number recognition is number %number?"
+    //% weight=29 group="Number recognition"
     export function numberRecognitionIsNumber(num: NumberCard): boolean {
         return _className == num.toString()
     }
@@ -652,8 +648,7 @@ namespace tabbyvision {
     /**
      * Number Recognition Get Number
      */
-    //% block = "number recognition get number "
-    //% blockId=tabbyvision_number_recognition_get_number 
+    //% blockId=tabbyvision_number_recognition_get_number block="number recognition get number"
     //% weight=30 group="Number recognition"
     export function numberRecognitionGetNumber(): number {
         let transfer2 = getResultClass()
@@ -666,9 +661,8 @@ namespace tabbyvision {
     /**
     * Number Recognition Get Position
     */
-    //% block = "number recognition get %res"
-    //% blockId=tabbyvision_number_recognition_get_position
-    //% weight=60 group="Number recognition"
+    //% blockId=tabbyvision_number_recognition_get_position block="number recognition get value %res"
+    //% weight=28 group="Number recognition"
     export function numberRecognitionGetPosition(res: GetResult): number {
         return getResultXYWH(res)
     }
@@ -678,9 +672,8 @@ namespace tabbyvision {
      * Letter Recognition is Letter
      * @param letter LetterCard; eg: LetterCard.6
      */
-    //% block = "letter recognition letter is %letter ?"
-    //% blockId=tabbyvision_letter_recognition_is_letter 
-    //% weight=30 group="Letter recognition"
+    //% blockId=tabbyvision_letter_recognition_is_letter block="letter recognition is letter %letter ?"
+    //% weight=29 group="Letter recognition"
     export function letterRecognitionIsLetter(letter: LetterCard): boolean {
         let letterList = ["A", "B", "C", "D", "E", "F"]
         return _className == letterList[letter]
@@ -689,8 +682,7 @@ namespace tabbyvision {
     /**
      * Letter Recognition Get Letter
      */
-    //% block = "letter recognition get letter "
-    //% blockId=tabbyvision_letter_recognition_get_letter 
+    //% blockId=tabbyvision_letter_recognition_get_letter block="letter recognition get letter "
     //% weight=30 group="Letter recognition"
     export function letterRecognitionGetLetter(): string {
         return getResultClass()
@@ -699,9 +691,8 @@ namespace tabbyvision {
     /**
     * Letter Recognition Get Position
     */
-    //% block = "letter recognition get %res"
-    //% blockId=tabbyvision_letter_recognition_get_position
-    //% weight=60 group="Letter recognition"
+    //% blockId=tabbyvision_letter_recognition_get_position block="letter recognition get %res"
+    //% weight=28 group="Letter recognition"
     export function letterRecognitionGetPosition(res: GetResult): number {
         return getResultXYWH(res)
     }
@@ -710,7 +701,7 @@ namespace tabbyvision {
      * @param ssid SSID; eg: ssid
      * @param pass PASSWORD; eg: password
      */
-    //% blockId=tabbyvision_join_ap block="Join Ap %ssid %pass"
+    //% blockId=tabbyvision_join_ap block="join AP %ssid %pass"
     //% group="WIFI" weight=50
     export function tabbyvision_join_ap(ssid: string, pass: string) {
         serial.writeLine(`K50 ${ssid} ${pass}`)
@@ -724,7 +715,7 @@ namespace tabbyvision {
      * @param user Username; eg: user
      * @param pass Password; eg: pass
      */
-    //% blockId=tabbyvision_mqtt_host block="Mqtt Host %host| clientID%cid||Port%port User%user Pass%pass"
+    //% blockId=tabbyvision_mqtt_host block="mqtt host %host| clientID%cid||port%port user%user pass%pass"
     //% group="WIFI" weight=46
     export function tabbyvision_mqtt_host(
         host: string,
@@ -744,7 +735,7 @@ namespace tabbyvision {
     /**
      * @param topic Topic to subscribe; eg: /topic
      */
-    //% blockId=tabbyvision_mqtt_sub block="Mqtt Subscribe %topic"
+    //% blockId=tabbyvision_mqtt_sub block="mqtt subscribe topic %topic"
     //% group="WIFI" weight=45
     export function tabbyvision_mqtt_sub(topic: string) {
         serial.writeLine(`K52 ${topic}`)
@@ -755,7 +746,7 @@ namespace tabbyvision {
      * @param topic Topic to publish; eg: /topic
      * @param data Data to publish; eg: hello
      */
-    //% blockId=tabbyvision_mqtt_pub block="Mqtt Publish %topic %data"
+    //% blockId=tabbyvision_mqtt_pub block="mqtt publish to topic %topic message %data"
     //% group="WIFI" weight=44
     export function tabbyvision_mqtt_pub(topic: string, data: string) {
         serial.writeLine(`K53 ${topic} ${data}`)
@@ -764,7 +755,7 @@ namespace tabbyvision {
     /**
      * @param topic Mqtt Read; eg: /topic
      */
-    //% blockId=tabbyvision_mqtt_read block="Mqtt Read %topic"
+    //% blockId=tabbyvision_mqtt_read block="mqtt read from topic %topic"
     //% group="WIFI" weight=43
     export function tabbyvision_mqtt_read(topic: string) {
         topic = topic || ''
@@ -774,7 +765,7 @@ namespace tabbyvision {
 
     }
 
-    //% blockId=tabbyvision_mqtt_onread block="on Mqtt Data"
+    //% blockId=tabbyvision_mqtt_onread block="on mqtt data received"
     //% group="WIFI" weight=42 draggableParameters=reporter
     export function tabbyvision_mqtt_onread(
         handler: (data: string, topic: string) => void
