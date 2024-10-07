@@ -273,15 +273,24 @@ namespace tabbyvision {
             if (cmd == 42) { // feature extraction
                 _className = b[1]
             } else if (cmd == 15) { // color blob tracking
-                _posX = parseInt(b[1])
-                _posY = parseInt(b[2])
-                _posW = parseInt(b[3])
-                _posH = parseInt(b[4])
+                if (b.length > 1) {
+                    _posX = parseInt(b[1])
+                    _posY = parseInt(b[2])
+                    _posW = parseInt(b[3])
+                    _posH = parseInt(b[4])
+                } else {
+                    _posX = _posY = _posW = _posH = 0
+                }
             } else if (cmd == 19) { // line follower color
-                _lineX1 = parseInt(b[1])
-                _lineY1 = parseInt(b[2])
-                _lineX2 = parseInt(b[3])
-                _lineY2 = parseInt(b[4])
+                if (b.length > 1) {
+                    _lineX1 = parseInt(b[1])
+                    _lineY1 = parseInt(b[2])
+                    _lineX2 = parseInt(b[3])
+                    _lineY2 = parseInt(b[4])
+                } else {
+
+                    _lineX1 = _lineY1 = _lineX2 = _lineY2 = 0
+                }
             } else if (modelCmd.indexOf(cmd) != -1) { // model cmd
                 if (b.length > 1) {
                     _posX = parseInt(b[1])
@@ -445,14 +454,10 @@ namespace tabbyvision {
 
     /**
      * Color Blob Tracking Get Result
-     * @param res for color; eg: GetResult.result_X
      */
     //% block = "color blob tracking get result %res"
     //% blockId=tabbyvision_color_blob_tracking_get_result
     //% weight=89 group="Color blob tracking"
-    //% res.fieldEditor="gridpicker"
-    //% res.fieldOptions.columns=4
-
     export function colorObjectTrackingGetPosition(res: GetResult): number {
         return getResultXYWH(res)
     }
