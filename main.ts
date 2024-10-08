@@ -385,6 +385,34 @@ namespace tabbyvision {
         serial.writeString('\n\n')
     }
 
+    let colors = ["255,0,0", "0,255,0", "0,0,255", "255,255,255", "0,0,0"]
+    export enum TextColor {
+        //% block="red"
+        Red = 0,
+        //% block="green"
+        Green = 1,
+        //% block="blue"
+        Blue = 2,
+        //% block="white"
+        White = 3,
+        //% block="block"
+        Block = 4,
+    }
+    
+    /**
+     * Display text
+     * @param text show text; eg: hello
+     * @param x coord x; eg: 0
+     * @param y coord y; eg: 0
+     * @param color show color; eg: 0
+     * @param sec duration; eg: 3
+     */
+    //% blockId=koi2_text_display block="display text %text x: %x y: %y color: %color sec: %sec"
+    //% weight=99 group="Basic"
+    export function textDisplay(text: string, x: number, y: number, color: TextColor, sec: number): void {
+        serial.writeLine(`K4 ${x + 40} ${y} ${sec * 1000} ${colors[color]} ${text}`)
+    }
+
     /**
      * Switch Function
      */
